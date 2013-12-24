@@ -18,7 +18,7 @@ sub new {
     my $self = bless {},$class;
     
     $self->{_dbh} = DBI->connect("DBI:mysql:database=backlink_audit_tool;host=localhost", 
-                       'root','Niagara1813', { RaiseError => 1 } ) or die ( "Couldn't connect to database: " . DBI->errstr );
+                       'root','secret', { RaiseError => 1 } ) or die ( "Couldn't connect to database: " . DBI->errstr );
     
     return $self;
 }
