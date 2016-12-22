@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # Author:  Mark Ibbotson
 # Purpose: Demo the ease of crawling in perl, there are many ways to skin a cat
-# OK:      Its in perl and the syntax can be enough to put any man jack off
+# OK:      Its in perl
 # TODO:    Needs to handle redirects, etc but check out the CPAN page below for this is already done in this lib.
 # http://search.cpan.org/~ether/WWW-Mechanize-1.73/lib/WWW/Mechanize.pm
 # apt-get install libwww-mechanize-perl
@@ -21,7 +21,7 @@ $| = 1;         # Page autorefresh
 # constructor
 sub new {
     my ($class, $url, $target, $maxLinks) = @_;
-    my $self = bless {},$class;
+    my $self          = bless {},$class;
     $self->{agent}    = WWW::Mechanize->new(autocheck => 0); # Crawler Library
     $self->{url}      = $url;                                # The link to spider
     $self->{hostRegX} = URI->new($url);                      # Host to match for local links
@@ -30,9 +30,8 @@ sub new {
     $self->{pending}  = [];                                  # Nice clean no dupes array
     $self->{maxLinks} = $maxLinks || 100;                    # Max pages
     $self->{timeout}  = 5;                                   # Timeout for each page visit (dont kill them)
-    $self->{agent}->max_redirect(1);
 
-    #die(print Dumper $self);
+    $self->{agent}->max_redirect(1);
 
     push(@{$self->{pending}}, $self->{url});                 # Init with our landing URL
 
@@ -46,22 +45,23 @@ sub visit {
     my %link_tracker = map { $_ => 1 } $self->{pending}; # Keep track of what links we've found already.
 
     # This is just too damned easy
-    while (my $queued_link = pop @{$self->{pending}})
-    {
+    while (my $queued_link = pop @{$self->{pending}})  {
+
         $self->{agent}->get($queued_link);  # Get the page
 
         # Check page status
         if($self->{agent}->status() < 400) {
+
             if($scanned < $self->{maxLinks}) {
                  %link_tracker = $self->parseLinks(%link_tracker);
                  $self->parseTargets();
             }
 
-            printf "\rPages scanned: [%d] Unique Links: [%s] Queued: [%s] Matched [%s]",
+            printf "\rPages scanned: [%d], Unique Links: [%s], Queued: [%s] Matched [%s]",
                     ++$scanned, scalar keys %link_tracker, scalar @{$self->{pending}}, scalar @{$self->{matches}};
-        }
-        else
-        {
+
+        } else {
+
             if(scalar keys %link_tracker == 1) {
                 printf "Site unavailable [%s]\n", $queued_link;
             }
