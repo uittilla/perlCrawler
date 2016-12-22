@@ -5,7 +5,6 @@
 # TODO:    Needs to handle redirects, etc but check out the CPAN page below for this is already done in this lib.
 # http://search.cpan.org/~ether/WWW-Mechanize-1.73/lib/WWW/Mechanize.pm
 # apt-get install libwww-mechanize-perl
-# Fear not the Perl, overcome and embrace it
 
 package Crawler;
 
